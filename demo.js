@@ -96,11 +96,14 @@ function preset() {
 function load(pdb_id) {
   $('#traj-widget').hide();
   $.ajax({ url : 'pdbs/'+pdb_id+'.pdb', success : function(data) {
+    console.log(data);
     structure = io.pdb(data);
+    console.log(structure);
     //mol.assignHelixSheet(structure);
     preset();
     //viewer.spheres('helices', structure.select({ aname : 'CA', rtype : 'C'}), { color : color.uniform('red'), radiusMultiplier : 0.3, showRelated : '1' });
     viewer.autoZoom();
+    console.log(viewer);
   }});
 }
 
@@ -276,7 +279,7 @@ $('#load-from-pdb').change(function() {
   this.value = '';
   this.blur();
   var url = 'http://www.rcsb.org/pdb/files/' + pdbId + '.pdb';
-  console.log(url)
+  console.log(url);
   io.fetchPdb(url, function(s) {
     structure = s;
     cartoon();
