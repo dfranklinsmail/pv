@@ -22,7 +22,7 @@ $(document).ready(function () {
 
                 var colourNumbersCount = countColours(pixels);
 
-                displayColourNumbercount(colourNumbersCount);
+                displayColourNumbercount(colourNumbersCount, cWidth * cHeight * 4);
             }
         }
        
@@ -38,13 +38,13 @@ $(document).ready(function () {
 
 function processData (x, y, width, height, webGlContext) {
     var pixels = new Uint8Array(width * height * 4);
-    webGlContext.readPixels(0, 0, width, height, webGlContext.RGBA, webGlContext.UNSIGNED_BYTE, pixels);
+    webGlContext.readPixels(0, 0, width, height, webGlContext.RGB, webGlContext.UNSIGNED_BYTE, pixels);
     console.log(pixels);
 
     return pixels;
 };
 
-function countColours (unit8Array) {
+function countColours (unit8Array,) {
     var counts = new Array(255);
     for (var i in unit8Array) {
         if (isNaN(counts[unit8Array[i]])) {
@@ -57,11 +57,11 @@ function countColours (unit8Array) {
     return counts;
 };
 
-function displayColourNumbercount (colourCounts) {
+function displayColourNumbercount (colourCounts, total) {
     console.log('The colour counts are :');
-    for(var i = 0; i < colourCounts.arrayLength; i++) {
-
-        str = i + ' : ' + colourcounts[i];
+    for(var i = 0; i < colourCounts.length; i++) {
+        var percentage = Math.floor(colourCounts[i]/total * 100); 
+        str = i + ' : ' + colourCounts[i] + ' with ' + percentage + '%';
         console.log(str);
     }
 };
