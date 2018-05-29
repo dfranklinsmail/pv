@@ -2,32 +2,49 @@ $(document).ready(function () {
 
     $('#calculate-contrast').click(function (event) {
 
-        var canvas = document.getElementsByTagName("canvas");
-        var viewer = document.getElementById('viewer');
-        //console.log(viewer.getImageData());
-        //var canvas = $('#canvas');
-        var arrayLength = canvas.arraylength;
-        for (var c of canvas) {
-            //var c = canvas[i];
-            var webglContext = c.getContext('webgl');
-            var twoDContext = c.getContext('2d');
-            if (webglContext !== null) {
-                console.log('the length of the canvas');
-                var cWidth = c.width;
-                console.log(cWidth);
-                console.log('the height of the canvas');
-                var cHeight = c.height;
-                console.log(cHeight);
-                var pixels = processData(0, 0, cWidth, cHeight, webglContext);
-                extractColours(pixels);
+        require(['pv'], function(PV) {
+            
+            pv = PV;
+            viewer = pv.Viewer(document.getElementById('viewer'));
+            viewer.options('style', 'hemilight');
+            viewer.requestRedraw();
+        });
+        /**
+       
+        var canvas = extractCanvas();
+        var pixels = processData(canvas);
+        extractColours(pixels);
 
-                drawRotated(20, webglContext, c)
-            }
-        }
+        drawRotated(20, webglContext, c)
+         * 
+         */
     });
 });
 
-function processData (x, y, width, height, webGlContext) {
+function extractCanvas() {
+    var canvas = document.getElementsByTagName("canvas");
+
+    var arrayLength = canvas.arraylength;
+    for (var c of canvas) {
+        //var c = canvas[i];
+        var webglContext = c.getContext('webgl');
+        var twoDContext = c.getContext('2d');
+        if (webglContext !== null) {
+            console.log('the length of the canvas');
+            var cWidth = c.width;
+            console.log(cWidth);
+            console.log('the height of the canvas');
+            var cHeight = c.height;
+            console.log(cHeight);
+
+            return c;
+        }
+    }
+}
+function processData (canvas) {
+    var width = canvas.width;
+    var height = canvas.height;
+    var webglContext = c.getContext('webgl');
     var pixels = new Uint8Array(width * height * 4);
     console.log('reading pixels');
     webGlContext.readPixels(0, 0, width, height, webGlContext.RGBA, webGlContext.UNSIGNED_BYTE, pixels);
