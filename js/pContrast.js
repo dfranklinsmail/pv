@@ -5,7 +5,7 @@ $(document).ready(function () {
         var pixels = processData(canvas);
         extractColours(pixels);
 
-        drawRotated(20, canvas.getContext('webgl'), canvas)
+       // drawRotated(20, canvas.getContext('webgl'), canvas)
         
     });
 });
@@ -39,6 +39,10 @@ function processData (canvas) {
     webGLContext.readPixels(0, 0, width, height, webGLContext.RGBA, webGLContext.UNSIGNED_BYTE, pixels);
     return pixels;
 };
+
+var maxBlue = 400000;
+var maxRed = 400000;
+var maxGreen = 400000;
 
 function extractColours(pixels) {
     var hexColour = 0;
@@ -76,6 +80,20 @@ function extractColours(pixels) {
     console.log('the total is ' +total);
     console.log(total);
 
+    //TODO max average count
+    var maxAvgBlue = blueCount/maxBlue;
+    console.log('max average blue count is '+maxAvgBlue);
+    console.log(maxAvgBlue);
+    var maxAvgGreen = greenCount/maxGreen;
+    console.log('max average green count is '+maxAvgGreen);
+    console.log(maxAvgGreen);
+    var maxAvgRed = redCount/maxRed;
+    console.log('max average red count is '+maxAvgRed);
+    console.log(maxAvgRed);
+    var totalAvgColour = maxAvgBlue + maxAvgGreen + maxAvgRed;
+
+    console.log('the total average colour count is '+totalAvgColour);
+    console.log(totalAvgColour);
 };
 
 function colourName(r, g, b) {
