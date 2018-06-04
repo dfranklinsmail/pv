@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     $('#calculate-contrast').click(function (event) {
 
+        /**
         require(['pv'], function(PV) {
             
             pv = PV;
@@ -9,15 +10,15 @@ $(document).ready(function () {
             viewer.options('style', 'hemilight');
             viewer.requestRedraw();
         });
-        /**
+        */
+        
        
         var canvas = extractCanvas();
         var pixels = processData(canvas);
         extractColours(pixels);
 
-        drawRotated(20, webglContext, c)
-         * 
-         */
+        drawRotated(20, canvas.getContext('webgl'), canvas)
+        
     });
 });
 
@@ -44,10 +45,10 @@ function extractCanvas() {
 function processData (canvas) {
     var width = canvas.width;
     var height = canvas.height;
-    var webglContext = c.getContext('webgl');
+    var webGLContext = canvas.getContext('webgl');
     var pixels = new Uint8Array(width * height * 4);
     console.log('reading pixels');
-    webGlContext.readPixels(0, 0, width, height, webGlContext.RGBA, webGlContext.UNSIGNED_BYTE, pixels);
+    webGLContext.readPixels(0, 0, width, height, webGLContext.RGBA, webGLContext.UNSIGNED_BYTE, pixels);
     return pixels;
 };
 
