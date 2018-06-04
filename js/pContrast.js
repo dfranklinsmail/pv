@@ -1,18 +1,6 @@
 $(document).ready(function () {
 
     $('#calculate-contrast').click(function (event) {
-
-        /**
-        require(['pv'], function(PV) {
-            
-            pv = PV;
-            viewer = pv.Viewer(document.getElementById('viewer'));
-            viewer.options('style', 'hemilight');
-            viewer.requestRedraw();
-        });
-        */
-        
-       
         var canvas = extractCanvas();
         var pixels = processData(canvas);
         extractColours(pixels);
@@ -111,6 +99,23 @@ function colourName(r, g, b) {
 
 
 function drawRotated(degrees, context, canvas){
+
+
+     
+        require(['pv'], function(PV) {
+            
+            pv = PV;
+            viewer = pv.Viewer(document.getElementById('viewer'), { 
+                width : 'auto', height: 'auto', antialias : true, fog : true,
+                outline : true, quality : 'high', style : 'phong',
+                selectionColor : 'white', transparency : 'screendoor', 
+                background : '#ccc', animateTime: 500, doubleClick : null
+            });
+            viewer.options('style', 'hemilight');
+            viewer.requestRedraw();
+        });
+       
+    /** 
     context.clearRect(0,0,canvas.width,canvas.height);
 
     // save the unrotated context of the canvas so we can restore it later
@@ -129,4 +134,5 @@ function drawRotated(degrees, context, canvas){
 
     // we’re done with the rotating so restore the unrotated context
     context.restore();
+    **/
 };
