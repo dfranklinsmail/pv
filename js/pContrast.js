@@ -5,7 +5,7 @@ $(document).ready(function () {
         var pixels = processData(canvas);
         extractColours(pixels);
 
-       // drawRotated(20, canvas.getContext('webgl'), canvas)
+        drawRotated(20, canvas.getContext('webgl'), canvas)
         
     });
 });
@@ -96,6 +96,20 @@ function extractColours(pixels) {
     console.log(totalAvgColour);
 };
 
+function rotateX(degrees) {
+    var cosX = Math.cos(degrees);
+    var sinX = Math.sin(degrees);
+    return [[1, 0, 0, 0], [0, cosX, -1*sinX, 0], [0, sinX, cosX, 0], [0, 0, 0, 1]];
+};
+
+function rotateY(degrees) {
+
+};
+
+function rotateZ(degrees) {
+
+};
+
 function colourName(r, g, b) {
     var colour = false;
 
@@ -118,19 +132,24 @@ function colourName(r, g, b) {
 
 function drawRotated(degrees, context, canvas){
 
-
+ console.log('in draw rotated');
      
         require(['pv'], function(PV) {
             
             pv = PV;
-            viewer = pv.Viewer(document.getElementById('viewer'), { 
-                width : 'auto', height: 'auto', antialias : true, fog : true,
-                outline : true, quality : 'high', style : 'phong',
-                selectionColor : 'white', transparency : 'screendoor', 
-                background : '#ccc', animateTime: 500, doubleClick : null
-            });
-            viewer.options('style', 'hemilight');
-            viewer.requestRedraw();
+            //viewer = pv.Viewer(document.getElementById('viewer'), { 
+            //    width : 'auto', height: 'auto', antialias : true, fog : true,
+            //    outline : true, quality : 'high', style : 'phong',
+            //    selectionColor : 'white', transparency : 'screendoor', 
+            //    background : '#ccc', animateTime: 500, doubleClick : null
+            //});
+            viwer = pv.viewer;
+            //viewer.options('style', 'hemilight');
+            //viewer.requestRedraw();
+            //console.log('trying the change the shading to hemilight');
+
+            console.log('rotating');
+            viewer.setRotation(rotateX(10), 0);
         });
        
     /** 
@@ -154,3 +173,4 @@ function drawRotated(degrees, context, canvas){
     context.restore();
     **/
 };
+
