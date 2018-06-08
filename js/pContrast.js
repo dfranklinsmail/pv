@@ -99,7 +99,9 @@ function extractColours(pixels) {
 function rotateX(degrees) {
     var cosX = Math.cos(degrees);
     var sinX = Math.sin(degrees);
-    return [[1, 0, 0, 0], [0, cosX, -1*sinX, 0], [0, sinX, cosX, 0], [0, 0, 0, 1]];
+    //return [1, 0, 0, 0, 0, cosX, -1*sinX, 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
+
+    return [cosX, cosX, cosX, cosX, cosX, cosX, -1*sinX, cosX, cosX, sinX, cosX, cosX, cosX, cosX, cosX, cosX];
 };
 
 function rotateY(degrees) {
