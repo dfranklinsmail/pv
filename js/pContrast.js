@@ -96,22 +96,6 @@ function extractColours(pixels) {
     console.log(totalAvgColour);
 };
 
-function rotateX(degrees) {
-    var cosX = Math.cos(degrees);
-    var sinX = Math.sin(degrees);
-    //return [1, 0, 0, 0, 0, cosX, -1*sinX, 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
-
-    return [cosX, cosX, cosX, cosX, cosX, cosX, -1*sinX, cosX, cosX, sinX, cosX, cosX, cosX, cosX, cosX, cosX];
-};
-
-function rotateY(degrees) {
-
-};
-
-function rotateZ(degrees) {
-
-};
-
 function colourName(r, g, b) {
     var colour = false;
 
@@ -146,7 +130,8 @@ function drawRotated(degrees, context, canvas){
             //    background : '#ccc', animateTime: 500, doubleClick : null
             //});
             viwer = pv.viewer;
-            //viewer.options('style', 'hemilight');
+            console.log('set style to hemilight');
+            viewer.options('style', 'hemilight');
             //viewer.requestRedraw();
             //console.log('trying the change the shading to hemilight');
 
@@ -176,3 +161,52 @@ function drawRotated(degrees, context, canvas){
     **/
 };
 
+//initialize to a 4X4 identiy matric, represented as a array of length 16
+//var currentRotation = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+var currentRotation = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+function rotateX(degrees) {
+    var cosX = Math.cos(degrees);
+    var sinX = Math.sin(degrees);
+    var transformationMatrix = [1, 0, 0, 0, 0, cosX, -1*sinX, 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
+
+    currentrotation = multiplyMatrix(currentRotation, transformationMatrix);
+    return currentRotation;
+};
+
+function rotateY(degrees) {
+
+};
+
+function rotateZ(degrees) {
+
+};
+
+//multiple the two 4x4 matrices
+function multiplyMatrix(matrixA, matrixB) {
+    
+    var rowSize = 4;
+    var colmSize = 4;
+    var matrixSize = rowSize * colmSize;
+
+    var result = [];
+    for (var i = 0; i < matrixSize; i++) {
+        result[i] = 0;
+        for (var c = i; c < 4; c=c+4) {
+            var cIndex = c;
+            var rowMax = c+4;
+            for (var r = c; r < rowMax; ++r) {
+                //result[i] = (matrixA[r] * matrixB[c]) + (matrixA[r] * matrixB[c]) + (matrixA[r] * matrixB[c]) + (matrixA[r] * matrixB[c]);
+                console.log('i is '+i);
+                console.log('c is '+c);
+                console.log('cIndex is '+cIndex);
+                console.log('r is '+r);
+                result[i] += (matrixA[r] * matrixB[cIndex]);
+                cIndex += 4;
+            }
+        }
+        console.log('next i');
+    }
+
+    return result;
+}
