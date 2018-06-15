@@ -163,14 +163,33 @@ function drawRotated(degrees, context, canvas){
 
 //initialize to a 4X4 identiy matric, represented as a array of length 16
 //var currentRotation = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-var currentRotation = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+var currentRotation = new Float32Array(9);
+currentRotation[0] = 1;
+currentRotation[1] = 0;
+currentRotation[2] = 0;
+currentRotation[3] = 0;
+currentRotation[4] = 1;
+currentRotation[5] = 0;
+currentRotation[6] = 0;
+currentRotation[7] = 0;
+currentRotation[8] = 1;
 
 function rotateX(degrees) {
     var cosX = Math.cos(degrees);
     var sinX = Math.sin(degrees);
-    var transformationMatrix = [1, 0, 0, 0, 0, cosX, -1*sinX, 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
+   // var transformationMatrix = [1, 0, 0, 0, 0, cosX, , 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
+    var transformationMatrix = new Float32Array(9);
+    transformationMatrix[0] = 1;
+    transformationMatrix[1] = 0;
+    transformationMatrix[2] = 0;
+    transformationMatrix[3] = 0;
+    transformationMatrix[4] = cosX;
+    transformationMatrix[5] = -1*sinX;
+    transformationMatrix[6] = 0;
+    transformationMatrix[7] = sinX;
+    transformationMatrix[8] = cosX;
 
-    currentrotation = multiplyMatrix(currentRotation, transformationMatrix);
+    currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
     return currentRotation;
 };
 
@@ -183,30 +202,18 @@ function rotateZ(degrees) {
 };
 
 //multiple the two 4x4 matrices
-function multiplyMatrix(matrixA, matrixB) {
+function multiplyMatrix(mA, mB) {
     
-    var rowSize = 4;
-    var colmSize = 4;
-    var matrixSize = rowSize * colmSize;
-
-    var result = [];
-    for (var i = 0; i < matrixSize; i++) {
-        result[i] = 0;
-        for (var c = i; c < 4; c=c+4) {
-            var cIndex = c;
-            var rowMax = c+4;
-            for (var r = c; r < rowMax; ++r) {
-                //result[i] = (matrixA[r] * matrixB[c]) + (matrixA[r] * matrixB[c]) + (matrixA[r] * matrixB[c]) + (matrixA[r] * matrixB[c]);
-                console.log('i is '+i);
-                console.log('c is '+c);
-                console.log('cIndex is '+cIndex);
-                console.log('r is '+r);
-                result[i] += (matrixA[r] * matrixB[cIndex]);
-                cIndex += 4;
-            }
-        }
-        console.log('next i');
-    }
+    var result = new Float32Array(9);
+    result[0] = mA[0] * mB[0] + mA[1] * mB[3] + mA[2] * mB[6];
+    result[1] = mA[0] * mB[1] + mA[1] * mB[4] + mA[2] * mB[7];
+    result[2] = mA[0] * mB[2] + mA[1] * mB[5] + mA[2] * mB[8];
+    result[3] = mA[3] * mB[0] + mA[4] * mB[3] + mA[5] * mB[6];
+    result[4] = mA[3] * mB[1] + mA[4] * mB[4] + mA[5] * mB[7];
+    result[5] = mA[3] * mB[2] + mA[4] * mB[5] + mA[5] * mB[8];
+    result[6] = mA[6] * mB[0] + mA[7] * mB[3] + mA[8] * mB[6];
+    result[7] = mA[6] * mB[1] + mA[7] * mB[4] + mA[8] * mB[7];
+    result[8] = mA[6] * mB[2] + mA[7] * mB[5] + mA[8] * mB[8];
 
     return result;
 }
