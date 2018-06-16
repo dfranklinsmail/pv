@@ -175,8 +175,9 @@ currentRotation[7] = 0;
 currentRotation[8] = 1;
 
 function rotateX(degrees) {
-    var cosX = Math.cos(degrees);
-    var sinX = Math.sin(degrees);
+    var radians = degrees * Math.PI /180;
+    var cosX = Math.cos(radians);
+    var sinX = Math.sin(radians);
    // var transformationMatrix = [1, 0, 0, 0, 0, cosX, , 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
     var transformationMatrix = new Float32Array(9);
     transformationMatrix[0] = 1;
@@ -194,11 +195,43 @@ function rotateX(degrees) {
 };
 
 function rotateY(degrees) {
+    var radians = degrees * Math.PI /180;
+    var cosX = Math.cos(radians);
+    var sinX = Math.sin(radians);
+   // var transformationMatrix = [1, 0, 0, 0, 0, cosX, , 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
+    var transformationMatrix = new Float32Array(9);
+    transformationMatrix[0] = cosX;
+    transformationMatrix[1] = 0;
+    transformationMatrix[2] = sinX;
+    transformationMatrix[3] = 0;
+    transformationMatrix[4] = 1;
+    transformationMatrix[5] = 0;
+    transformationMatrix[6] = -sinX;
+    transformationMatrix[7] = 0;
+    transformationMatrix[8] = cosX;
 
+    currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+    return currentRotation;
 };
 
 function rotateZ(degrees) {
+    var radians = degrees * Math.PI /180;
+    var cosX = Math.cos(radians);
+    var sinX = Math.sin(radians);
+   // var transformationMatrix = [1, 0, 0, 0, 0, cosX, , 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
+    var transformationMatrix = new Float32Array(9);
+    transformationMatrix[0] = cosX;
+    transformationMatrix[1] = -sinX;
+    transformationMatrix[2] = 0;
+    transformationMatrix[3] = sinX;
+    transformationMatrix[4] = cosX;
+    transformationMatrix[5] = 0;
+    transformationMatrix[6] = 0;
+    transformationMatrix[7] = 0;
+    transformationMatrix[8] = 1;
 
+    currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+    return currentRotation;
 };
 
 //multiple the two 4x4 matrices
