@@ -5,27 +5,25 @@ $(document).ready(function () {
         var pixels = processData(canvas);
         extractColours(pixels);
 
-        drawRotated(20, canvas.getContext('webgl'), canvas)
-        
+       // for (var i = 0; i < 12; ++i) {
+            drawRotated(30, canvas.getContext('webgl'), canvas);
+        //    sleep(1000);
+        //}
     });
 });
 
+function sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+}
 function extractCanvas() {
     var canvas = document.getElementsByTagName("canvas");
 
     var arrayLength = canvas.arraylength;
     for (var c of canvas) {
-        //var c = canvas[i];
         var webglContext = c.getContext('webgl');
         var twoDContext = c.getContext('2d');
         if (webglContext !== null) {
-            console.log('the length of the canvas');
-            var cWidth = c.width;
-            console.log(cWidth);
-            console.log('the height of the canvas');
-            var cHeight = c.height;
-            console.log(cHeight);
-
             return c;
         }
     }
@@ -116,53 +114,17 @@ function colourName(r, g, b) {
 };
 
 
-function drawRotated(degrees, context, canvas){
-
- console.log('in draw rotated');
-     
+function drawRotated(degrees, context, canvas){     
         require(['pv'], function(PV) {
             
             pv = PV;
-            //viewer = pv.Viewer(document.getElementById('viewer'), { 
-            //    width : 'auto', height: 'auto', antialias : true, fog : true,
-            //    outline : true, quality : 'high', style : 'phong',
-            //    selectionColor : 'white', transparency : 'screendoor', 
-            //    background : '#ccc', animateTime: 500, doubleClick : null
-            //});
             viwer = pv.viewer;
-            console.log('set style to hemilight');
             viewer.options('style', 'hemilight');
-            //viewer.requestRedraw();
-            //console.log('trying the change the shading to hemilight');
-
-            console.log('rotating');
-            viewer.setRotation(rotateX(10), 0);
+            viewer.setRotation(rotateX(degrees), 0);
         });
-       
-    /** 
-    context.clearRect(0,0,canvas.width,canvas.height);
-
-    // save the unrotated context of the canvas so we can restore it later
-    // the alternative is to untranslate & unrotate after drawing
-    context.save();
-
-    // move to the center of the canvas
-    context.translate(canvas.width/2,canvas.height/2);
-
-    // rotate the canvas to the specified degrees
-    context.rotate(degrees*Math.PI/180);
-
-    // draw the image
-    // since the context is rotated, the image will be rotated also
-    context.drawImage(image,-image.width/2,-image.width/2);
-
-    // we’re done with the rotating so restore the unrotated context
-    context.restore();
-    **/
 };
 
-//initialize to a 4X4 identiy matric, represented as a array of length 16
-//var currentRotation = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+//initialize to a 3x3 identiy matric, represented as a array of length 9
 var currentRotation = new Float32Array(9);
 currentRotation[0] = 1;
 currentRotation[1] = 0;
@@ -178,7 +140,7 @@ function rotateX(degrees) {
     var radians = degrees * Math.PI /180;
     var cosX = Math.cos(radians);
     var sinX = Math.sin(radians);
-   // var transformationMatrix = [1, 0, 0, 0, 0, cosX, , 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
+   
     var transformationMatrix = new Float32Array(9);
     transformationMatrix[0] = 1;
     transformationMatrix[1] = 0;
@@ -218,7 +180,6 @@ function rotateZ(degrees) {
     var radians = degrees * Math.PI /180;
     var cosX = Math.cos(radians);
     var sinX = Math.sin(radians);
-   // var transformationMatrix = [1, 0, 0, 0, 0, cosX, , 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
     var transformationMatrix = new Float32Array(9);
     transformationMatrix[0] = cosX;
     transformationMatrix[1] = -sinX;
@@ -234,7 +195,7 @@ function rotateZ(degrees) {
     return currentRotation;
 };
 
-//multiple the two 4x4 matrices
+//multiple the two 3x3 matrices
 function multiplyMatrix(mA, mB) {
     
     var result = new Float32Array(9);
