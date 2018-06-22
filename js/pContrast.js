@@ -1,21 +1,20 @@
 $(document).ready(function () {
 
-    $('#calculate-contrast').click(function (event) {
-        var canvas = extractCanvas();
-        var pixels = processData(canvas);
-        extractColours(pixels);
-
-       // for (var i = 0; i < 12; ++i) {
-            drawRotated(30, canvas.getContext('webgl'), canvas);
-        //    sleep(1000);
-        //}
+    $('#calculate-contrast').click(function () {
+        calculateContrast();
     });
 });
 
-function sleep(delay) {
-    var start = new Date().getTime();
-    while (new Date().getTime() < start + delay);
-}
+function calculateContrast() {
+    var canvas = extractCanvas();
+    var pixels = processData(canvas);
+    extractColours(pixels);
+    // for (var i = 0; i < 12; ++i) {
+    rotate(30, canvas.getContext('webgl'), canvas);
+    //setInterval(drawRotated(30, canvas.getContext('webgl'), canvas), 1000.0);
+
+};
+
 function extractCanvas() {
     var canvas = document.getElementsByTagName("canvas");
 
@@ -113,16 +112,37 @@ function colourName(r, g, b) {
     return colour;
 };
 
-
-function drawRotated(degrees, context, canvas){     
+function setStyleHemilight(){     
         require(['pv'], function(PV) {
-            
             pv = PV;
             viwer = pv.viewer;
             viewer.options('style', 'hemilight');
-            viewer.setRotation(rotateX(degrees), 0);
         });
 };
+
+function drawRotated(degrees, context, canvas){     
+        require(['pv'], function(PV) {
+            pv = PV;
+            viwer = pv.viewer;
+            viewer.setRotation(rotateX(degrees), 0);
+
+            //viewer._cam.setRotation(rotateX(degrees));
+            //viewr.requestAnimFrame(viewer._boundDraw);
+        });
+};
+
+function rotate(degrees, context, canvas) { 
+    setStyleHemilight();   
+    var drawFunc = function() {drawRotated(degrees, context, canvas);};
+    setInterval(drawFunc, 1000.0/15.0);
+    //var logHelloWorld = console.log("hello world");
+    //setInterval(logHelloWorld, 1000.0/15.0);
+    //drawRotated(degrees, context, canvas);
+};
+
+function printHello() {
+    console.log('hello')
+}
 
 //initialize to a 3x3 identiy matric, represented as a array of length 9
 var currentRotation = new Float32Array(9);
