@@ -8,7 +8,9 @@ $(document).ready(function () {
 function calculateContrast() {
     var canvas = extractCanvas();
     var pixels = processData(canvas);
-    extractColours(pixels);
+    currentStateValue  = extractColours(pixels);
+
+    
     // for (var i = 0; i < 12; ++i) {
     rotate(30, canvas.getContext('webgl'), canvas);
     //setInterval(drawRotated(30, canvas.getContext('webgl'), canvas), 1000.0);
@@ -121,27 +123,94 @@ function setStyleHemilight(){
 };
 
 function drawRotated(degrees, context, canvas){     
+
+    if (i<10) {
         require(['pv'], function(PV) {
             pv = PV;
             viwer = pv.viewer;
-            viewer.setRotation(rotateX(degrees), 0);
-
+            viewer.setRotation(rotateY(degrees), 0);
+	    i++;
             //viewer._cam.setRotation(rotateX(degrees));
             //viewr.requestAnimFrame(viewer._boundDraw);
-        });
+          });
+    }	else {
+ 	clearInterval(drawIntervalProcessId);
+   }
 };
 
+var i = 0;
+var drawIntervalProcessId;
 function rotate(degrees, context, canvas) { 
     setStyleHemilight();   
     var drawFunc = function() {drawRotated(degrees, context, canvas);};
-    setInterval(drawFunc, 1000.0/15.0);
+    i =0;
+    drawIntervalProcessId = setInterval(drawFunc, 1000.0/15.0);
     //var logHelloWorld = console.log("hello world");
     //setInterval(logHelloWorld, 1000.0/15.0);
     //drawRotated(degrees, context, canvas);
 };
 
+function rotate2(x, y , z) {
+    rotateX(x);
+    rotateY(y);
+    rotateZ(z);
+
+    var canvas = extractCanvas();
+    var pixels = processData(canvas);
+    var calculateValue  = extractColours(pixels);
+
+
+    rotateX(-x);
+    rotateY(-y);
+    rotateZ(-z);
+
+    return calculateValue;
+}
+
+
+var currentStateValue;
+function hillClimbingStep() {
+    var minRotation = 1; 
+    
+    var xNeighbourStateValue = rotate2(minRotation, 0, 0);
+    var yNeighbourStateValue = rotate2(0, minRotation, 0);
+    var yNeighbourStateValue = rotate2(0, 0, minRotation);
+
+    var biggest = 0;
+
+    if (xNeighbourStateValue > currentStateValue) {
+	currentStateValue = xNeighbourStateValue;
+	biggest = 1;
+    } else if (yNeighbourStateValue > currentStateValue) {
+	currentStateValue = yNeighbourStateValue;
+	biggest = 2;
+    } else if (zNeighbourStateValue > currentStateValue) {
+	currentStateValue = zNeighbourStateValue;
+	biggest = 3;
+    }
+
+    
+    if (biggest == 1) {
+	rotateX(minRotation)
+    } else if (biggest == 2) {
+	rotateY(minRotation)
+    } else if(biggest == 3) {
+	rotateZ(minRotation)
+    } else {
+	stop();
+    }
+}
+
+function stop() {
+    clearInterval(drawIntervalProcessId);
+}
 function printHello() {
     console.log('hello')
+}
+
+
+function maximize() {
+    
 }
 
 //initialize to a 3x3 identiy matric, represented as a array of length 9
@@ -157,6 +226,7 @@ currentRotation[7] = 0;
 currentRotation[8] = 1;
 
 function rotateX(degrees) {
+    if (degrees != 0 ) {
     var radians = degrees * Math.PI /180;
     var cosX = Math.cos(radians);
     var sinX = Math.sin(radians);
@@ -172,7 +242,8 @@ function rotateX(degrees) {
     transformationMatrix[7] = sinX;
     transformationMatrix[8] = cosX;
 
-    currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+      currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+    }
     return currentRotation;
 };
 
