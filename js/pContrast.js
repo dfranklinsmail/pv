@@ -1,9 +1,23 @@
 $(document).ready(function () {
 
+    /** button handlers */
     $('#calculate-contrast').click(function () {
         calculateContrast();
     });
+
+    $('#rotateX').click(function () {
+        drawAndRotated(30, 0, 0);
+    });
+
+    $('#rotateY').click(function () {
+       drawAndRotated(0, 30, 0);
+    });
+
+    $('#rotateZ').click(function () {
+        drawAndRotated(0, 0, 30);
+    });
 });
+
 
 function calculateContrast() {
     var canvas = extractCanvas();
@@ -122,6 +136,36 @@ function setStyleHemilight(){
         });
 };
 
+var pid = 0;
+function drawAndRotated(xDegree, yDegree, zDegree){     
+    var currentRotation = new Float32Array(9);
+    currentRotation[0] = 1;
+    currentRotation[1] = 0;
+    currentRotation[2] = 0;
+    currentRotation[3] = 0;
+    currentRotation[4] = 1;
+    currentRotation[5] = 0;
+    currentRotation[6] = 0;
+    currentRotation[7] = 0;
+    currentRotation[8] = 1;
+    
+    if (pid == 0) {
+        setStyleHemilight();
+        var rotateFunction = function() {
+            require(['pv'], function(PV) {
+                pv = PV;
+                viwer = pv.viewer;
+                currentRotation = rotateZ(rotateY(rotateX(currentRotation, xDegree), yDegree), zDegree);
+                viewer.setRotation(currentRotation, 0);
+            })
+        };
+        pid = setInterval( rotateFunction, 1000/30);
+    } else {
+        clearInterval(pid);
+        pid = 0;
+    }
+};
+
 function drawRotated(degrees, context, canvas){     
 
     if (i<10) {
@@ -213,76 +257,73 @@ function maximize() {
     
 }
 
+function drawRotateX(degrees) {
+
+}
+
 //initialize to a 3x3 identiy matric, represented as a array of length 9
-var currentRotation = new Float32Array(9);
-currentRotation[0] = 1;
-currentRotation[1] = 0;
-currentRotation[2] = 0;
-currentRotation[3] = 0;
-currentRotation[4] = 1;
-currentRotation[5] = 0;
-currentRotation[6] = 0;
-currentRotation[7] = 0;
-currentRotation[8] = 1;
+function rotateX(currentRotation, degrees) {
+    if ( degrees != 0 ) {
+        var radians = degrees * Math.PI /180;
+        var cosX = Math.cos(radians);
+        var sinX = Math.sin(radians);
+    
+        var transformationMatrix = new Float32Array(9);
+        transformationMatrix[0] = 1;
+        transformationMatrix[1] = 0;
+        transformationMatrix[2] = 0;
+        transformationMatrix[3] = 0;
+        transformationMatrix[4] = cosX;
+        transformationMatrix[5] = -1*sinX;
+        transformationMatrix[6] = 0;
+        transformationMatrix[7] = sinX;
+        transformationMatrix[8] = cosX;
 
-function rotateX(degrees) {
-    if (degrees != 0 ) {
-    var radians = degrees * Math.PI /180;
-    var cosX = Math.cos(radians);
-    var sinX = Math.sin(radians);
-   
-    var transformationMatrix = new Float32Array(9);
-    transformationMatrix[0] = 1;
-    transformationMatrix[1] = 0;
-    transformationMatrix[2] = 0;
-    transformationMatrix[3] = 0;
-    transformationMatrix[4] = cosX;
-    transformationMatrix[5] = -1*sinX;
-    transformationMatrix[6] = 0;
-    transformationMatrix[7] = sinX;
-    transformationMatrix[8] = cosX;
-
-      currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+        currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
     }
     return currentRotation;
 };
 
-function rotateY(degrees) {
-    var radians = degrees * Math.PI /180;
-    var cosX = Math.cos(radians);
-    var sinX = Math.sin(radians);
-   // var transformationMatrix = [1, 0, 0, 0, 0, cosX, , 0, 0, sinX, cosX, 0, 0, 0, 0, 1];
-    var transformationMatrix = new Float32Array(9);
-    transformationMatrix[0] = cosX;
-    transformationMatrix[1] = 0;
-    transformationMatrix[2] = sinX;
-    transformationMatrix[3] = 0;
-    transformationMatrix[4] = 1;
-    transformationMatrix[5] = 0;
-    transformationMatrix[6] = -sinX;
-    transformationMatrix[7] = 0;
-    transformationMatrix[8] = cosX;
+function rotateY(currentRotation, degrees) {
+    if ( degrees != 0 ) {
+        var radians = degrees * Math.PI /180;
+        var cosX = Math.cos(radians);
+        var sinX = Math.sin(radians);
 
-    currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+        var transformationMatrix = new Float32Array(9);
+        transformationMatrix[0] = cosX;
+        transformationMatrix[1] = 0;
+        transformationMatrix[2] = sinX;
+        transformationMatrix[3] = 0;
+        transformationMatrix[4] = 1;
+        transformationMatrix[5] = 0;
+        transformationMatrix[6] = -sinX;
+        transformationMatrix[7] = 0;
+        transformationMatrix[8] = cosX;
+
+        currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+    }
     return currentRotation;
 };
 
-function rotateZ(degrees) {
-    var radians = degrees * Math.PI /180;
-    var cosX = Math.cos(radians);
-    var sinX = Math.sin(radians);
-    var transformationMatrix = new Float32Array(9);
-    transformationMatrix[0] = cosX;
-    transformationMatrix[1] = -sinX;
-    transformationMatrix[2] = 0;
-    transformationMatrix[3] = sinX;
-    transformationMatrix[4] = cosX;
-    transformationMatrix[5] = 0;
-    transformationMatrix[6] = 0;
-    transformationMatrix[7] = 0;
-    transformationMatrix[8] = 1;
+function rotateZ(currentRotation, degrees) {
+    if (degrees != 0 ) {
+        var radians = degrees * Math.PI /180;
+        var cosX = Math.cos(radians);
+        var sinX = Math.sin(radians);
+        var transformationMatrix = new Float32Array(9);
+        transformationMatrix[0] = cosX;
+        transformationMatrix[1] = -sinX;
+        transformationMatrix[2] = 0;
+        transformationMatrix[3] = sinX;
+        transformationMatrix[4] = cosX;
+        transformationMatrix[5] = 0;
+        transformationMatrix[6] = 0;
+        transformationMatrix[7] = 0;
+        transformationMatrix[8] = 1;
 
-    currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+        currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
+    }
     return currentRotation;
 };
 
