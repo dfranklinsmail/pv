@@ -16,6 +16,10 @@ $(document).ready(function () {
     $('#rotateZ').click(function () {
         drawAndRotated(0, 0, 30);
     });
+
+    $('#hillClimb').click(function () {
+        hillClimb();
+    });
 });
 
 
@@ -107,6 +111,7 @@ function extractColours(pixels) {
 
     console.log('the total average colour count is '+totalAvgColour);
     console.log(totalAvgColour);
+    return totalAvgColour;
 };
 
 function colourName(r, g, b) {
@@ -182,6 +187,14 @@ function drawRotated(degrees, context, canvas){
    }
 };
 
+function setRotation(rotation) {
+    require(['pv'], function(PV) {
+        pv = PV;
+        viwer = pv.viewer;
+        viewer.setRotation(rotateY(degrees), 0);
+      });
+}
+
 var i = 0;
 var drawIntervalProcessId;
 function rotate(degrees, context, canvas) { 
@@ -194,10 +207,12 @@ function rotate(degrees, context, canvas) {
     //drawRotated(degrees, context, canvas);
 };
 
-function rotate2(x, y , z) {
-    rotateX(x);
-    rotateY(y);
-    rotateZ(z);
+function rotate2(currRotation, x, y , z) {
+    currRotation = rotateX(currRotation, x);
+    currRotation = rotateY(currRotation, y);
+    currRotation = rotateZ(currRotation, z);
+
+    setRotation(currRotation);
 
     var canvas = extractCanvas();
     var pixels = processData(canvas);
@@ -211,38 +226,54 @@ function rotate2(x, y , z) {
     return calculateValue;
 }
 
+function hillClimb() {
+    var currentRotation = new Float32Array(9);
+    currentRotation[0] = 1;
+    currentRotation[1] = 0;
+    currentRotation[2] = 0;
+    currentRotation[3] = 0;
+    currentRotation[4] = 1;
+    currentRotation[5] = 0;
+    currentRotation[6] = 0;
+    currentRotation[7] = 0;
+    currentRotation[8] = 1;
 
-var currentStateValue;
-function hillClimbingStep() {
-    var minRotation = 1; 
+    hillClimbingStep(currentRotation);
+}
+
+var currentStateValue = 0;
+var minRotation = 1; 
+function hillClimbingStep(currentRotation) {
     
-    var xNeighbourStateValue = rotate2(minRotation, 0, 0);
-    var yNeighbourStateValue = rotate2(0, minRotation, 0);
-    var yNeighbourStateValue = rotate2(0, 0, minRotation);
+    var xNeighbourStateValue = rotate2(currentRotation, minRotation, 0, 0);
+    var yNeighbourStateValue = rotate2(currentRotation, 0, minRotation, 0);
+    var zNeighbourStateValue = rotate2(currentRotation, 0, 0, minRotation);
 
     var biggest = 0;
 
     if (xNeighbourStateValue > currentStateValue) {
-	currentStateValue = xNeighbourStateValue;
-	biggest = 1;
+	    currentStateValue = xNeighbourStateValue;
+	    biggest = 1;
     } else if (yNeighbourStateValue > currentStateValue) {
-	currentStateValue = yNeighbourStateValue;
-	biggest = 2;
+	    currentStateValue = yNeighbourStateValue;
+	    biggest = 2;
     } else if (zNeighbourStateValue > currentStateValue) {
-	currentStateValue = zNeighbourStateValue;
-	biggest = 3;
+	    currentStateValue = zNeighbourStateValue;
+	    biggest = 3;
     }
-
+    var xNeighbourStateValue = rotate2(minRotation, 0, 0);
     
     if (biggest == 1) {
-	rotateX(minRotation)
+	    currentRotation = rotateX(minRotation)
     } else if (biggest == 2) {
-	rotateY(minRotation)
+	    currentRotation = rotateY(minRotation)
     } else if(biggest == 3) {
-	rotateZ(minRotation)
+	    currentRotation= rotateZ(minRotation)
     } else {
-	stop();
+	    stop();
     }
+
+    return currentStateValue;
 }
 
 function stop() {
