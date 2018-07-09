@@ -187,14 +187,6 @@ function drawRotated(degrees, context, canvas){
    }
 };
 
-function setRotation(rotation) {
-    require(['pv'], function(PV) {
-        pv = PV;
-        viwer = pv.viewer;
-        viewer.setRotation(rotateY(degrees), 0);
-      });
-}
-
 var i = 0;
 var drawIntervalProcessId;
 function rotate(degrees, context, canvas) { 
@@ -208,21 +200,27 @@ function rotate(degrees, context, canvas) {
 };
 
 function rotate2(currRotation, x, y , z) {
+    var calculateValue = 0;
+    var pv = require(['pv']);
+  
+    viwer = pv.viewer;
+
     currRotation = rotateX(currRotation, x);
     currRotation = rotateY(currRotation, y);
     currRotation = rotateZ(currRotation, z);
 
-    setRotation(currRotation);
+    viewer.setRotation(currRotation);
 
     var canvas = extractCanvas();
     var pixels = processData(canvas);
-    var calculateValue  = extractColours(pixels);
+    calculateValue  = extractColours(pixels);
 
 
     rotateX(-x);
     rotateY(-y);
     rotateZ(-z);
 
+    
     return calculateValue;
 }
 
@@ -242,7 +240,7 @@ function hillClimb() {
 }
 
 var currentStateValue = 0;
-var minRotation = 1; 
+var minRotation = 10; 
 function hillClimbingStep(currentRotation) {
     
     var xNeighbourStateValue = rotate2(currentRotation, minRotation, 0, 0);
@@ -261,7 +259,6 @@ function hillClimbingStep(currentRotation) {
 	    currentStateValue = zNeighbourStateValue;
 	    biggest = 3;
     }
-    var xNeighbourStateValue = rotate2(minRotation, 0, 0);
     
     if (biggest == 1) {
 	    currentRotation = rotateX(minRotation)
