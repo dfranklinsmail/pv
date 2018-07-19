@@ -17,6 +17,40 @@ $(document).ready(function () {
         drawAndRotated(0, 0, 30);
     });
 
+    /** 
+     * Hill Climbing Algorithm
+
+        Current Orientation - an array of 9 float values that indicate the current rotation
+        Current Orientation Value - represents the separation value of the current orientation
+        Loop Process Id - a javascript process id of the setInterval so the process may halt
+
+        Set of Available Moves - a list of x, y, z values which represents a neighbour ex [1, 0, 0]
+
+        Best Move - a move taken from set of available moves that is the best so far
+        Best Move Value - separation value of the best move so far
+
+
+
+        Main Loop
+        Are there any moves left?
+        Yes, 
+        Take a move out of the list of available moves
+        Move to that location calculate the orientation value and return back to original location.
+        Compare the orientation value with the current best orientation value, if its better then replace best with current and current move with move that was removed
+        No,
+        Is best orientation better than current orientation?
+        Yes,
+        Replace current orientation with best and move to that location
+        Calculate new moves
+        No,
+        We are at a local maximum!
+        Stop loop
+
+     * 
+    */
+    var hcpid = 0;
+    var computedMoves = [1, 2, 3];
+    var movesIndex = 0;
     $('#hillClimb').click(function () {
         hillClimb();
     });
@@ -224,6 +258,7 @@ function rotate2(currRotation, x, y , z) {
     return calculateValue;
 }
 
+
 function hillClimb() {
     var currentRotation = new Float32Array(9);
     currentRotation[0] = 1;
@@ -236,7 +271,32 @@ function hillClimb() {
     currentRotation[7] = 0;
     currentRotation[8] = 1;
 
-    hillClimbingStep(currentRotation);
+    //hillClimbingStep(currentRotation);
+    var main = function() {mainLoop();}
+    hcpid = setInterval(main, 1000/15)
+};
+
+function mainLoop() {
+    var moves = computeMoves();
+    move(moves);
+    if (movesIndex > 30) {
+        clearInterval(hcpid);
+    }
+};
+
+function computeMoves() {
+    if (computedMoves.length == 0)
+        computedMoves = [1, 2, 3];
+    return computedMoves;
+}
+
+
+function move(moves) {
+    if (moves.length > 0) {
+        console.log(moves[0]);
+        moves.splice(0, 1); //remove the moved to elment
+        movesIndex++;
+    }
 }
 
 var currentStateValue = 0;
