@@ -1,9 +1,15 @@
+'use strict';
+
+const Model = require('./PVModel.js');
+
 class HillClimb {
 
-    constructor() {
+    constructor() { //constructor could take a model object?
+        
         //this.move = new Moves();
         //var loopId = setInterval(step, 1000);
         this.moves = new Moves();
+        this.model = new Model()
         this.loopId = null;
 
     };
@@ -38,7 +44,7 @@ class HillClimb {
             console.log(move);
         }
     }
-}
+};
 
 class Moves {
     constructor() {
@@ -65,9 +71,12 @@ class Moves {
             [0, 0, -1]
         ];
     }
-}
+};
+
+module.exports = HillClimb;
 
 //function test() {
     var hillClimb = new HillClimb();
     hillClimb.climb();
 //}
+

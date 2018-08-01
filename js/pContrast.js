@@ -48,9 +48,9 @@ $(document).ready(function () {
 
      * 
     */
-    var hcpid = 0;
-    var computedMoves = [1, 2, 3];
-    var movesIndex = 0;
+    var hcpid = 0;  //the process id of the setInterval which acts like a main loop
+    var moves = computeMoves();
+    var maxMoves = 0;  //just for testing, limits the max number of moves
     $('#hillClimb').click(function () {
         hillClimb();
     });
@@ -277,25 +277,29 @@ function hillClimb() {
 };
 
 function mainLoop() {
-    var moves = computeMoves();
-    move(moves);
-    if (movesIndex > 30) {
+    if (moves.length==0) {
+        move(moves);
+    } else {
+
+    }
+    if (maxMoves == 0) {
         clearInterval(hcpid);
     }
 };
 
 function computeMoves() {
-    if (computedMoves.length == 0)
-        computedMoves = [1, 2, 3];
-    return computedMoves;
+    return [1, 2, 3];
 }
 
-
+//take a move from the moves list
+//transform the current state based on a move
+//calculate the moved to state
+//move back to the privious location
 function move(moves) {
     if (moves.length > 0) {
         console.log(moves[0]);
         moves.splice(0, 1); //remove the moved to elment
-        movesIndex++;
+        --maxMoves; //decrement the max moves
     }
 }
 
@@ -369,6 +373,7 @@ function rotateX(currentRotation, degrees) {
 
         currentRotation = multiplyMatrix(currentRotation, transformationMatrix);
     }
+    
     return currentRotation;
 };
 
@@ -417,7 +422,6 @@ function rotateZ(currentRotation, degrees) {
 
 //multiple the two 3x3 matrices
 function multiplyMatrix(mA, mB) {
-    
     var result = new Float32Array(9);
     result[0] = mA[0] * mB[0] + mA[1] * mB[3] + mA[2] * mB[6];
     result[1] = mA[0] * mB[1] + mA[1] * mB[4] + mA[2] * mB[7];
