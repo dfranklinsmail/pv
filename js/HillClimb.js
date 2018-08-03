@@ -1,15 +1,14 @@
 'use strict';
 
-const Model = require('./PVModel.js');
 
 class HillClimb {
 
-    constructor() { //constructor could take a model object?
+    constructor(Model) { //constructor could take a model object?
         
         //this.move = new Moves();
         //var loopId = setInterval(step, 1000);
         this.moves = new Moves();
-        this.model = new Model()
+        this.model = Model;
         this.loopId = null;
 
     };
@@ -73,10 +72,9 @@ class Moves {
     }
 };
 
-module.exports = HillClimb;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = HillClimb;
+  else
+    window.HillClimb = HillClimb;
 
-//function test() {
-    var hillClimb = new HillClimb();
-    hillClimb.climb();
-//}
 

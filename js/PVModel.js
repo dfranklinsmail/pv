@@ -108,4 +108,7 @@ class Model {
     }
 };
 
-module.exports = Model;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = Model;
+  else
+    window.Model = Model;

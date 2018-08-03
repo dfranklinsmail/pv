@@ -1,3 +1,5 @@
+
+
 $(document).ready(function () {
 
     /** button handlers */
@@ -52,7 +54,18 @@ $(document).ready(function () {
     var moves = computeMoves();
     var maxMoves = 0;  //just for testing, limits the max number of moves
     $('#hillClimb').click(function () {
-        hillClimb();
+        //hillClimb();
+        //const hillClimbAlgo = require('./HillClimb.js');
+        
+        var model = new Model();
+        var hillClimb = new HillClimb(model);
+        //var hillClimb = require(['HillClimb']);
+        hillClimb.climb();
+        
+
+        //require(['../js/PVModel', '../js/HillClimb'], function(hillClimb) {
+        //    hillClimb.climb();
+        //});
     });
 });
 
