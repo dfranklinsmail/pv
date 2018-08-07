@@ -123,9 +123,9 @@ class Model {
     }
 
     calculateValue() {
-        var canvas = extractCanvas();
-        var pixels = processData(canvas);
-        return extractColours(pixels);
+        var canvas = this.extractCanvas();
+        var pixels = this.processData(canvas);
+        return this.extractColours(pixels);
     }
 
     extractCanvas() {
@@ -176,33 +176,21 @@ class Model {
                 noColourCount++;
             }
         }
-        console.log('blue count is '+blueCount);
-        console.log(blueCount);
-        console.log('red count is '+ redCount);
-        console.log(redCount);
-        console.log('green count is '+greenCount);
-        console.log(greenCount);
-        console.log('no Colour count is '+ noColourCount);
-        console.log(noColourCount);
-
+        console.log('=================');
+        console.log('blue# '+blueCount+' red# '+ redCount+' green# ' 
+                    + greenCount + ' no# '+ noColourCount);
         var total = blueCount + redCount + greenCount;
         console.log('the total is ' +total);
-        console.log(total);
 
         //TODO max average count
         var maxAvgBlue = blueCount/this.maxBlue;
-        console.log('max average blue count is '+maxAvgBlue);
-        console.log(maxAvgBlue);
         var maxAvgGreen = greenCount/this.maxGreen;
-        console.log('max average green count is '+maxAvgGreen);
-        console.log(maxAvgGreen);
         var maxAvgRed = redCount/this.maxRed;
-        console.log('max average red count is '+maxAvgRed);
-        console.log(maxAvgRed);
         var totalAvgColour = maxAvgBlue + maxAvgGreen + maxAvgRed;
+        console.log('ave blue '+maxAvgBlue + 'ave green '+maxAvgGreen + 'ave red '+maxAvgRed);
 
         console.log('the total average colour count is '+totalAvgColour);
-        console.log(totalAvgColour);
+        console.log('=================');
         return totalAvgColour;
     }
 

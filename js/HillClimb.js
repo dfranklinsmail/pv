@@ -36,6 +36,7 @@ class HillClimb {
                 //set the new localMax
                 this.localMaxValue = this.maxNeighbourValue;
                 //move to local max
+                console.log(">>>> new local max move "+this.maxNeighbourMove);
                 this.model.rotate(this.maxNeighbourMove[0], this.maxNeighbourMove[1], this.maxNeighbourMove[2]);
                 this.localMaxOrientation = this.model.currentRotation;
             } else {
