@@ -14,6 +14,7 @@ class HillClimb {
         this.localMaxValue = 0.0;
         this.localMaxOrientation = null;
 
+        this.accumulatedMoves = [];
         this.maxNeighbourValue = 0.0;
         this.maxNeighbourMove = null;
 
@@ -35,11 +36,20 @@ class HillClimb {
                 this.moves.calculateMoves();
                 //set the new localMax
                 this.localMaxValue = this.maxNeighbourValue;
+                //add the move to history
+                this.accumulatedMoves.push(this.maxNeighbourMove);
                 //move to local max
                 console.log(">>>> new local max move "+this.maxNeighbourMove);
                 this.model.rotate(this.maxNeighbourMove[0], this.maxNeighbourMove[1], this.maxNeighbourMove[2]);
                 this.localMaxOrientation = this.model.currentRotation;
             } else {
+                //display accumulated moves
+                console.log('accumulated moves');
+                console.log(this.accumulatedMoves);
+                console.log('orientation of best orientation');
+                console.log(this.localMaxOrientation)
+                console.log('the local max value '+this.localMaxValue);
+
                 //end loop
                 clearInterval(this.loopId);
             }
@@ -109,14 +119,23 @@ class Moves {
 
     calculateMoves() {
         this.currentIndex = 0;
+        var minMoveValue = 5;
         return [
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-            [-1, 0, 0],
-            [0, -1, 0],
-            [0, 0, -1]
+            [minMoveValue, 0, 0],
+            [0, minMoveValue, 0],
+            [0, 0, minMoveValue],
+            [-minMoveValue, 0, 0],
+            [0, -minMoveValue, 0],
+            [0, 0, -minMoveValue]
         ];
+        // return [
+        //     [1, 0, 0],
+        //     [0, 1, 0],
+        //     [0, 0, 1],
+        //     [-1, 0, 0],
+        //     [0, -1, 0],
+        //     [0, 0, -1]
+        // ];
     }
 
     negate(move) {
