@@ -18,6 +18,12 @@ class Model {
         this.maxGreen = 400000;
     }
 
+    setStyleHemilight(){     
+        require(['pv'], function(PV) {
+            viewer.options('style', 'hemilight');
+        });
+    }
+
     rotate(xDegree, yDegree, zDegree) {
         //var myPV = require(['pv']);
         // var pvNew = window.pv;

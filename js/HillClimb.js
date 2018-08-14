@@ -14,7 +14,6 @@ class HillClimb {
         this.localMaxValue = 0.0;
         this.localMaxOrientation = null;
 
-        this.accumulatedMoves = [];
         this.maxNeighbourValue = 0.0;
         this.maxNeighbourMove = null;
 
@@ -22,6 +21,7 @@ class HillClimb {
     };
 
    climb() {
+        this.model.setStyleHemilight();
         console.log('climbing....');
         var t = this;  
         this.loopId = setInterval(function() {t.step();}, 1000);
@@ -29,17 +29,17 @@ class HillClimb {
 
     step() {
         if (this.moves.isempty()) {
-            //if the known localMax is less then max neighbour
-            if (this.localMaxValue < this.maxNeighbourValue) {
+            //if the known localMax is less or equal then max neighbour
+            if (this.localMaxValue <= this.maxNeighbourValue) {
                 //then:
                  // recalculate moves
                 this.moves.calculateMoves();
                 //set the new localMax
                 this.localMaxValue = this.maxNeighbourValue;
                 //add the move to history
-                this.accumulatedMoves.push(this.maxNeighbourMove);
+                this.moves.newMaxMove(this.maxNeighbourMove);
                 //move to local max
-                console.log(">>>> new local max move "+this.maxNeighbourMove);
+                console.log(">>>> new local max move " + this.maxNeighbourMove + ' with value' + this.maxNeighbourValue);
                 this.model.rotate(this.maxNeighbourMove[0], this.maxNeighbourMove[1], this.maxNeighbourMove[2]);
                 this.localMaxOrientation = this.model.currentRotation;
             } else {
@@ -94,7 +94,14 @@ class HillClimb {
 class Moves {
     constructor() {
         this.currentIndex = 0;
+        this.accumulatedMoves = [];
+        
         this.moves = this.calculateMoves();
+
+    }
+
+    newMaxMove(move) {
+        this.accumulatedMoves.push(move);
     }
 
     pop() {
@@ -120,7 +127,7 @@ class Moves {
     calculateMoves() {
         this.currentIndex = 0;
         var minMoveValue = 5;
-        return [
+        var newMoves =  [
             [minMoveValue, 0, 0],
             [0, minMoveValue, 0],
             [0, 0, minMoveValue],
@@ -128,6 +135,31 @@ class Moves {
             [0, -minMoveValue, 0],
             [0, 0, -minMoveValue]
         ];
+
+        //remove the last move from the list of new moves
+        if (this.accumulatedMoves.length > 0) {
+            //get the last move
+            var moveToBeRemoved = this.accumulatedMoves.pop();
+            this.accumulatedMoves.push(moveToBeRemoved);
+
+            //negate it to remove the move that goes back
+            moveToBeRemoved = this.negate(moveToBeRemoved);
+            var indexToRmove = -1;
+            
+            newMoves.forEach(function(elements, index) {
+                if (elements[0] === moveToBeRemoved[0]
+                    && elements[1] === moveToBeRemoved[1]
+                    && elements[2] === moveToBeRemoved[2]) {
+                        indexToRmove = index;
+                    }
+            }, this);
+
+            if ( indexToRmove >= 0 ) {
+                newMoves.splice(indexToRmove, 1);
+            }
+        }
+
+        return newMoves;
         // return [
         //     [1, 0, 0],
         //     [0, 1, 0],
