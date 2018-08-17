@@ -30,7 +30,7 @@ class HillClimb {
     step() {
         if (this.moves.isempty()) {
             //if the known localMax is less or equal then max neighbour
-            if (this.localMaxValue <= this.maxNeighbourValue) {
+            if (this.localMaxValue < this.maxNeighbourValue) {
                 //then:
                  // recalculate moves
                 this.moves.calculateMoves();

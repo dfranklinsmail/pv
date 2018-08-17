@@ -192,12 +192,18 @@ class Model {
         var maxAvgBlue = blueCount/this.maxBlue;
         var maxAvgGreen = greenCount/this.maxGreen;
         var maxAvgRed = redCount/this.maxRed;
-        var totalAvgColour = maxAvgBlue + maxAvgGreen + maxAvgRed;
-        console.log('ave blue '+maxAvgBlue + 'ave green '+maxAvgGreen + 'ave red '+maxAvgRed);
+	var totalAvgColour = maxAvgBlue + maxAvgGreen + maxAvgRed;
 
-        console.log('the total average colour count is '+totalAvgColour);
+        //console.log('ave blue '+maxAvgBlue + 'ave green '+maxAvgGreen + 'ave red '+maxAvgRed);
+
+        //console.log('the total average colour count is '+totalAvgColour);
+	var tCount = blueCount * greenCount;
+	console.log('total count is '+tCount);
         console.log('=================');
-        return totalAvgColour;
+        //return totalAvgColour;
+
+
+	return tCount;
     }
 
     colourName(r, g, b) {
