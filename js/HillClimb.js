@@ -89,6 +89,10 @@ class HillClimb {
             //this.model.rotate(move[0], move[1], move[2]);
         }
     }
+
+    bruteFore() {
+        
+    }
 };
 
 class Moves {

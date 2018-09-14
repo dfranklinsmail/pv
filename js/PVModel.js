@@ -24,6 +24,14 @@ class Model {
         });
     }
 
+    setStyleRibon(){     
+        require(['pv'], function(PV) {
+            viewer.cartoon('structure', structure, {
+                color : color.bySS(), showRelated : '1',
+            });
+        });
+    }
+
     rotate(xDegree, yDegree, zDegree) {
         //var myPV = require(['pv']);
         // var pvNew = window.pv;
@@ -36,7 +44,12 @@ class Model {
         this.currentRotation = rotateZ(rotateY(rotateX(this.currentRotation, xDegree), yDegree), zDegree);
         console.log('current rotation');
         console.log(this.currentRotation);
-        var cr = this.currentRotation
+        move(this.currentRotation);
+        
+        return this.currentRotation;
+    }
+    
+    move(cr) {
         var myPV;
         require(['pv'], function(PV) {
             myPV = PV;
