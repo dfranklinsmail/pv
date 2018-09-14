@@ -20,7 +20,9 @@ class IterateSearch {
         this.model = Model;
 
         //loop variables
-        this.count = 0;
+        this.countX = 0;        
+        this.countY = 0;
+        this.countZ = 0;
         this.maxCount = 360*360*360;
         this.loopId = null;
 
@@ -38,13 +40,14 @@ class IterateSearch {
     } 
 
     loop() {
-        if (this.count > this.maxCount) {
+        if (this.countZ >= 360) {
             //finished move to best and finish
             this.model.move(this.bestOrientation);
+            clearInterval(this.loopId);
+	
         } else if (this.currentMove === null) {
             //calculate next move
             this.currentMove = this.calculateNextMove();
-            this.count = this.count + 10;
             //move to next move
             this.currentOrientation = this.model.rotate(this.currentMove[0], 
                 this.currentMove[1], this.currentMove[2]);
@@ -63,6 +66,22 @@ class IterateSearch {
     }
 
     calculateNextMove() {
-        return [this.count % 360*360, this.count % 360, this.count % 360];
+        if (this.countX == 360) {
+            this.countX = 0;
+            this.countY = this.countY + 10;
+        } else {
+            this.countX = this.countX + 10;
+        }
+
+       if (this.countY == 360) {
+            this.countY = 0;
+            this.countZ = this.countZ + 10;
+        } else {
+            this.countY = this.countY + 10;
+        }
+
+
+
+        return [this.countX, this.countY, this.countZ];
     }
 }
