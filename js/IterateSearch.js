@@ -66,22 +66,20 @@ class IterateSearch {
     }
 
     calculateNextMove() {
+        var nextMove;
         if (this.countX == 360) {
             this.countX = 0;
             this.countY = this.countY + 10;
-        } else {
-            this.countX = this.countX + 10;
-        }
-
-       if (this.countY == 360) {
+            nextMove = [0, 10, 0];
+        } else if (this.countY == 360) {
             this.countY = 0;
             this.countZ = this.countZ + 10;
+            nextMove = [0, 0, 10];
         } else {
-            this.countY = this.countY + 10;
+            this.countX = this.countX + 10;
+            nextMove = [10, 0, 0];
         }
 
-
-
-        return [this.countX, this.countY, this.countZ];
+        return nextMove;
     }
 }

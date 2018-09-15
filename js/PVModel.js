@@ -41,10 +41,11 @@ class Model {
         // console.log(this.currentRotation);
         // v.setRotation(this.currentRotation, 0);
 
+        console.log('moving x='+xDegree+' y='+yDegree+' z='+zDegree);
         this.currentRotation = rotateZ(rotateY(rotateX(this.currentRotation, xDegree), yDegree), zDegree);
         console.log('current rotation');
         console.log(this.currentRotation);
-        move(this.currentRotation);
+        this.move(this.currentRotation);
         
         return this.currentRotation;
     }
