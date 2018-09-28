@@ -24,14 +24,7 @@ class Model {
         });
     }
 
-    setStyleRibon(){     
-        require(['pv'], function(PV) {
-            viewer.cartoon('structure', structure, {
-                color : color.bySS(), showRelated : '1',
-            });
-        });
-    }
-
+ 
     rotate(xDegree, yDegree, zDegree) {
         //var myPV = require(['pv']);
         // var pvNew = window.pv;
@@ -41,10 +34,7 @@ class Model {
         // console.log(this.currentRotation);
         // v.setRotation(this.currentRotation, 0);
 
-        console.log('moving x='+xDegree+' y='+yDegree+' z='+zDegree);
         this.currentRotation = rotateZ(rotateY(rotateX(this.currentRotation, xDegree), yDegree), zDegree);
-        console.log('current rotation');
-        console.log(this.currentRotation);
         this.move(this.currentRotation);
         
         return this.currentRotation;
@@ -148,6 +138,13 @@ class Model {
         return this.extractColours(pixels);
     }
 
+    saveToFile(protein) {
+        console.log('saveing '+protein);
+        var canvas = this.extractCanvas();
+        var dataURL = canvas.toDataURL();
+        console.log(dataURL);
+    }
+
     extractCanvas() {
         var canvas = document.getElementsByTagName("canvas");
 
@@ -202,22 +199,17 @@ class Model {
         var total = blueCount + redCount + greenCount;
         console.log('the total is ' +total);
 
-        //TODO max average count
-        var maxAvgBlue = blueCount/this.maxBlue;
-        var maxAvgGreen = greenCount/this.maxGreen;
-        var maxAvgRed = redCount/this.maxRed;
-	var totalAvgColour = maxAvgBlue + maxAvgGreen + maxAvgRed;
-
-        //console.log('ave blue '+maxAvgBlue + 'ave green '+maxAvgGreen + 'ave red '+maxAvgRed);
-
         //console.log('the total average colour count is '+totalAvgColour);
-	var tCount = blueCount * greenCount;
-	console.log('total count is '+tCount);
+        if (blueCount === 0) blueCount = 1;
+        if (redCount === 0) redCount = 1;
+        if (greenCount === 0) greenCount = 1;
+        var tCount = blueCount * greenCount * redCount;
+        console.log('total count is '+tCount);
         console.log('=================');
         //return totalAvgColour;
 
 
-	return tCount;
+	    return tCount;
     }
 
     colourName(r, g, b) {
