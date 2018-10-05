@@ -55,7 +55,8 @@ class PDBGenerator {
             
             iterateSearch.start(function() {
                 //save the image to a file
-                model.saveToFile(protein);
+                //model.saveToFile(protein);
+                model.sendToServer(protein);
                 //saveProtein(protein);
             });
         }

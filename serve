@@ -9,6 +9,8 @@ except ImportError:
     import http.server as BaseHTTPServer
 
 import os
+from io import BytesIO
+import logging
 
 # essentially like SimpleHTTPRequestHandler, but sets the allow origin
 # header.
@@ -52,6 +54,27 @@ class RelaxedRequestHandler(SimpleHTTPRequestHandler):
         self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
         self.end_headers()
         return f
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        body = self.rfile.read(content_length)
+        self.send_response(200)
+        self.end_headers()
+        response = BytesIO()
+        response.write(b'This is POST request. ')
+        response.write(b'Received: ')
+        response.write(body)
+        self.wfile.write(response.getvalue())
+
+        #save the data to a file
+        logging.info('POST %s' % (self.path))
+        print 'POST {}'.format(self.path)
+        proteinName = self.path[self.path.find('=')+1:]
+        print 'protein {}'.format(proteinName)
+        data = body[body.find(',')+1:]
+        dataFile = proteinName+'.png'
+        with open('/Users/sircrashalot/Documents/school/thesis/proteins/'+dataFile, 'wb') as f:
+            f.write(data)
 
 
 BaseHTTPServer.test(RelaxedRequestHandler, HTTPServer)

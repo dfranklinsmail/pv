@@ -142,7 +142,42 @@ class Model {
         console.log('saveing '+protein);
         var canvas = this.extractCanvas();
         var dataURL = canvas.toDataURL();
-        console.log(dataURL);
+        //console.log(dataURL);
+        //saveAs(dataURL, )
+        var filename = "/Users/sircrashalot/Documents/school/thesis/proteins"+protein+".png";
+        var proteinFile = new File(filename);
+        new File()
+        proteinFile.open("w");
+        proteinFile.write( this.dataURLtoBlob(dataURL));
+        proteinFile.close();
+    }
+
+    sendToServer(protein) {
+        console.log('saveing '+protein);
+        var canvas = this.extractCanvas();
+        var dataURL = canvas.toDataURL('image/jpg');
+
+        //$.post('http://localhost:8000/?protein='+protein, dataURL, function(data) {console.log(data);});
+
+        $.ajax({
+            type: "POST",
+            url:'http://localhost:8000/?protein='+protein,
+            contentType: "image/png",
+            data: dataURL,
+            success: function(data){
+                console.log(data);
+           } 
+        });
+
+    }
+
+    dataURLtoBlob(dataurl) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], {type:mime});
     }
 
     extractCanvas() {
