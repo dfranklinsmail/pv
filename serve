@@ -11,6 +11,7 @@ except ImportError:
 import os
 from io import BytesIO
 import logging
+import base64
 
 # essentially like SimpleHTTPRequestHandler, but sets the allow origin
 # header.
@@ -73,8 +74,9 @@ class RelaxedRequestHandler(SimpleHTTPRequestHandler):
         print 'protein {}'.format(proteinName)
         data = body[body.find(',')+1:]
         dataFile = proteinName+'.png'
-        with open('/Users/sircrashalot/Documents/school/thesis/proteins/'+dataFile, 'wb') as f:
-            f.write(data)
+        #with open('/Users/sircrashalot/Documents/school/thesis/proteins/'+dataFile, 'wb') as f:
+        with open('/home/sircrashalot/Thesis/pv/protein-output-files/'+dataFile, 'wb') as f:
+            f.write(base64.b64decode(data))
 
 
 BaseHTTPServer.test(RelaxedRequestHandler, HTTPServer)
