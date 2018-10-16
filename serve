@@ -71,10 +71,20 @@ class RelaxedRequestHandler(SimpleHTTPRequestHandler):
         print 'POST {}'.format(self.path)
         proteinName = self.path[self.path.find('=')+1:]
         print 'protein {}'.format(proteinName)
-        data = body[body.find(',')+1:]
         dataFile = proteinName+'.png'
-        with open('/Users/sircrashalot/Documents/school/thesis/proteins/'+dataFile, 'wb') as f:
+        folderPath = '/Users/sircrashalot/Documents/school/thesis/proteins/'
+        with open(folderPath+dataFile, 'wb') as f:
             f.write(data)
+        #get next protien
+        data = findNextProtein(folderPath)
 
 
 BaseHTTPServer.test(RelaxedRequestHandler, HTTPServer)
+
+
+#Need a class to handle the saving of a png
+    #May need to get rid of the gray background,
+    #noise in the image
+#Need a class to determine the next protein to analyse
+    #25PDB lists 1600 proteins, 
+    #formulate the pdb url for the corrispoinding fasta file 
