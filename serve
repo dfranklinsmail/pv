@@ -11,6 +11,7 @@ except ImportError:
 import os
 from io import BytesIO
 import logging
+import base64
 
 # essentially like SimpleHTTPRequestHandler, but sets the allow origin
 # header.
