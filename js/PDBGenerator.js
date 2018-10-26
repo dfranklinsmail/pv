@@ -4,7 +4,7 @@ $( document ).ready(function() {
     $('#PDBGenerator').click(function () {
         
         var generator = new PDBGenerator();
-        generator.start();
+        generator.start('1A6M');
     
     });
 });
@@ -15,14 +15,14 @@ class PDBGenerator {
         this.intervalId = 0
     };
 
-    start() {
-        
-        var protein = '1A6M';
+    start(protein) {
         //load a protein
-        this.loadProtein(protein);
-        var t = this;
-        this.intervalId = setInterval(function() {t.rotateAndSave(protein);}, 1000);
-        
+        if (protein) {
+            protein = protein.substring(0,4);
+            this.loadProtein(protein);
+            var t = this;
+            this.intervalId = setInterval(function() {t.rotateAndSave(protein);}, 1000);
+        }
     };
 
     loadProtein(protein) {
@@ -52,11 +52,14 @@ class PDBGenerator {
             //calculate its best orientation
             var model = new Model();
             var iterateSearch = new IterateSearch(model);
-            
+            var nextProtein = null;
+            var self = this;
             iterateSearch.start(function() {
                 //save the image to a file
                 //model.saveToFile(protein);
-                model.sendToServer(protein);
+                model.sendToServer(protein, function(nextProtein) {
+                    self.start(nextProtein);
+                });
                 //saveProtein(protein);
             });
         }
