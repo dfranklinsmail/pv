@@ -152,13 +152,13 @@ class Model {
         proteinFile.close();
     }
 
-    sendToServer(protein) {
+    sendToServer(protein, successFunction) {
         console.log('saveing '+protein);
         var canvas = this.extractCanvas();
         var dataURL = canvas.toDataURL('image/jpg');
 
         //$.post('http://localhost:8000/?protein='+protein, dataURL, function(data) {console.log(data);});
-
+        
         $.ajax({
             type: "POST",
             url:'http://localhost:8000/?protein='+protein,
@@ -166,6 +166,7 @@ class Model {
             data: dataURL,
             success: function(data){
                 console.log(data);
+                successFunction(data);
            } 
         });
 
