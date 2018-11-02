@@ -29,7 +29,7 @@ class ProteinPicker():
             if kp not in folderProteins :
                 return kp
 
-        return null
+        return ''
 
 
 
@@ -55,7 +55,9 @@ class ProteinPicker():
                         line_count = 1
                     else:
                         protein = row[0]
-                        structuralClass = row[3]
-                        self.knownProteins[row[0]] = row[3]
+                        if protein.endswith('_') or len(protein) == 4:
+                            protein = protein[0:4]
+                            structuralClass = row[3]
+                            self.knownProteins[protein] = row[3]
         
         return self.knownProteins

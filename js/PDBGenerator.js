@@ -17,7 +17,7 @@ class PDBGenerator {
 
     start(protein) {
         //load a protein
-        if (protein) {
+        if (protein && protein.length > 0) {
             protein = protein.substring(0,4);
             this.loadProtein(protein);
             var t = this;
@@ -57,7 +57,8 @@ class PDBGenerator {
             iterateSearch.start(function() {
                 //save the image to a file
                 //model.saveToFile(protein);
-                model.sendToServer(protein, function(nextProtein) {
+                model.sendToServer(protein);
+                model.getNextProtein(function(nextProtein) {
                     self.start(nextProtein);
                 });
                 //saveProtein(protein);

@@ -152,7 +152,7 @@ class Model {
         proteinFile.close();
     }
 
-    sendToServer(protein, successFunction) {
+    sendToServer(protein) {
         console.log('saveing '+protein);
         var canvas = this.extractCanvas();
         var dataURL = canvas.toDataURL('image/jpg');
@@ -163,15 +163,21 @@ class Model {
             type: "POST",
             url:'http://localhost:8000/?protein='+protein,
             contentType: "image/png",
-            data: dataURL,
-            success: function(data){
-                console.log(data);
-                successFunction(data);
-           } 
+            data: dataURL
         });
 
     }
 
+    getNextProtein( successFunction ){
+        $.ajax({
+            type: "GET",
+            url:'http://localhost:8000/nextProtein',
+            sucess: function(data) {
+                onsole.log(data);
+                successFunction(data);
+            }
+        });
+    }
     dataURLtoBlob(dataurl) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
