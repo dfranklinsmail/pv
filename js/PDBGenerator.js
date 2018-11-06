@@ -4,7 +4,7 @@ $( document ).ready(function() {
     $('#PDBGenerator').click(function () {
         
         var generator = new PDBGenerator();
-        generator.start('1A6M');
+        generator.getNextProtein();
     
     });
 });
@@ -13,6 +13,7 @@ class PDBGenerator {
 
     constructor() {
         this.intervalId = 0
+        this.model = new Model()
     };
 
     start(protein) {
@@ -50,20 +51,27 @@ class PDBGenerator {
         if (this.intervalId > 0) {
             clearInterval(this.intervalId);
             //calculate its best orientation
-            var model = new Model();
-            var iterateSearch = new IterateSearch(model);
+            var iterateSearch = new IterateSearch(this.model);
             var nextProtein = null;
             var self = this;
             iterateSearch.start(function() {
                 //save the image to a file
                 //model.saveToFile(protein);
-                model.sendToServer(protein);
-                model.getNextProtein(function(nextProtein) {
-                    self.start(nextProtein);
-                });
+                this.model.sendToServer(protein);
+                this.getNextProtein();
                 //saveProtein(protein);
-            });
+            }.bind(this));
         }
     };
+    
+    getNextProtein() {
+        this.model.getNextProtein(function(nextProtein) {
+            if (!nextProtein) {
+                console.log('no new protein')
+            } else {
+                this.start(nextProtein);
+            }
+        }.bind(this));
+    }
 
 }

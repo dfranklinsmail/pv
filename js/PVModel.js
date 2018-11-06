@@ -169,14 +169,21 @@ class Model {
     }
 
     getNextProtein( successFunction ){
-        $.ajax({
-            type: "GET",
-            url:'http://localhost:8000/nextProtein',
-            sucess: function(data) {
-                onsole.log(data);
-                successFunction(data);
-            }
+        $.get("http://localhost:8000/nextProtein", function(data, status){
+            successFunction(data);
+            //alert("Data: " + data + "\nStatus: " + status);
         });
+        // $.ajax({
+        //     type: "GET",
+        //     url:'http://localhost:8000/nextProtein',
+        //     sucess: function(data) {
+        //         console.log(data);
+        //         successFunction(data);
+        //     },
+        //     error: function(error) {
+        //         console.log(error);
+        //     }
+        // });
     }
     dataURLtoBlob(dataurl) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
