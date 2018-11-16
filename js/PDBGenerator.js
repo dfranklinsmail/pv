@@ -69,6 +69,7 @@ class PDBGenerator {
             if (!nextProtein) {
                 console.log('no new protein')
             } else {
+                console.log('next protein is ', nextProtein);
                 this.start(nextProtein);
             }
         }.bind(this));

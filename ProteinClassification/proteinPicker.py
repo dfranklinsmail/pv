@@ -55,7 +55,7 @@ class ProteinPicker():
                         line_count = 1
                     else:
                         protein = row[0]
-                        if protein.endswith('_') or len(protein) == 4:
+                        if protein.endswith('_') or len(protein) <= 4:
                             protein = protein[0:4]
                             structuralClass = row[3]
                             self.knownProteins[protein] = row[3]
