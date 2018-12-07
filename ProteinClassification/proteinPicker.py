@@ -17,7 +17,7 @@ class ProteinPicker():
     """
     def findNextProtein(self, path) :
         self.getKnownProteins()
-        print 'length ', len(self.knownProteins)
+        #print 'length ', len(self.knownProteins)
         files = os.listdir(path)
     
         folderProteins = []
@@ -55,9 +55,9 @@ class ProteinPicker():
                         line_count = 1
                     else:
                         protein = row[0]
-                        if protein.endswith('_') or len(protein) <= 4:
+                        if protein.endswith('_'):
                             protein = protein[0:4]
-                            structuralClass = row[3]
-                            self.knownProteins[protein] = row[3]
+                        structuralClass = row[3]
+                        self.knownProteins[protein] = row[3]
         
         return self.knownProteins
