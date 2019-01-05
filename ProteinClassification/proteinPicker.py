@@ -15,10 +15,12 @@ class ProteinPicker():
         This method will find one protein in the 25pdb file that is
         not in the given folder path, and find its corrisponding url.
     """
-    def findNextProtein(self, path) :
+
+    def findNextProtein(self, dirname) :
+        print('in find next protein')
         self.getKnownProteins()
         #print 'length ', len(self.knownProteins)
-        files = os.listdir(path)
+        files = os.listdir(dirname)
     
         folderProteins = []
         for file in files:
@@ -55,6 +57,7 @@ class ProteinPicker():
                         line_count = 1
                     else:
                         protein = row[0]
+                        print('the protein is ' +protein)
                         if protein.endswith('_'):
                             protein = protein[0:4]
                         structuralClass = row[3]
