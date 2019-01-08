@@ -56,11 +56,35 @@ class ProteinPicker():
                     if line_count == 0:
                         line_count = 1
                     else:
-                        protein = row[0]
-                        print('the protein is ' +protein)
-                        if protein.endswith('_'):
-                            protein = protein[0:4]
-                        structuralClass = row[3]
-                        self.knownProteins[protein] = row[3]
+                        protein = Protein(row[0])
+                        print('the protein is ')
+                        print(protein)
+                        
+                        #set the classification for this protein
+                        self.knownProteins[protein] = row[3] 
         
+        print('returning known proteins')
         return self.knownProteins
+
+
+
+class Protein():
+    def __init__(self, encodedProtein):
+        #extract the protein's name
+        self.protein = encodedProtein[0:4]
+        self.chain = encodedProtein[4:5]
+        if len(encodedProtein) > 5:
+            chainSegment = encodedProtein[6:].replace('-', ' ').split(' ')
+            self.chainSegmentStart = chainSegment[0]
+            self.chainSegmentEnd = chainSegment[1]
+        
+    def __str__(self):
+        toString = self.protein
+        if self.chain != "_":
+            toString += self.chain
+        if hasattr(self, 'chainSegmentEnd'):
+            toString += ":"+self.chainSegmentStart + "-" + self.chainSegmentEnd 
+        return toString
+
+    def __repr__(self):
+        return "Protein"
