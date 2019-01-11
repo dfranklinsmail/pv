@@ -25,11 +25,14 @@ class ProteinPicker():
         folderProteins = []
         for file in files:
             if file.endswith('.png') :
-                folderProteins.append(file[:4])
+                print(file[:len(file)-4])
+                folderProteins.append(file[:len(file)-4])
 
         for kp in self.knownProteins :
-            if kp not in folderProteins :
-                return kp
+            proteinName = kp.__str__()
+            if proteinName not in folderProteins :
+                print(proteinName)
+                return kp.name()
 
         return ''
 
@@ -37,14 +40,14 @@ class ProteinPicker():
 
     def savePNG(self, proteinName, path, data) :
         #save the data to a file
-        logging.info('Saving %s, protein to folder: %s', proteinName, path)
+        print('Saving {}, protein to folder: {}'.format(proteinName, path))
         
         dataFile = proteinName+'.png'
         data = data[len('data:image/png;base64,'):]
 
         with open(path+dataFile, 'wb') as f:
-            #f.write(base64.decodestring(data))
-            f.write(data.decode('base64'))
+            f.write(base64.decodestring(data))
+            #f.write(data.decode('base64'))
 
     def getKnownProteins(self) :
 
@@ -83,8 +86,11 @@ class Protein():
         if self.chain != "_":
             toString += self.chain
         if hasattr(self, 'chainSegmentEnd'):
-            toString += ":"+self.chainSegmentStart + "-" + self.chainSegmentEnd 
+            toString += "-"+self.chainSegmentStart + "-" + self.chainSegmentEnd 
         return toString
 
     def __repr__(self):
         return "Protein"
+
+    def name(self):
+        return self.__str__().encode()

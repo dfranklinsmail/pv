@@ -17,6 +17,7 @@ from ProteinClassification.proteinPicker import ProteinPicker
 # header.
 class RelaxedRequestHandler(SimpleHTTPRequestHandler):
     folderPath = '/Users/sircrashalot/Documents/school/thesis/proteins/'
+    pp = ProteinPicker()
 
     def send_head(self):
         """
@@ -46,8 +47,8 @@ class RelaxedRequestHandler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 response = BytesIO()
                 #get next protien
-                pp = ProteinPicker()
-                nextProtein = pp.findNextProtein(self.folderPath)
+                
+                nextProtein = self.pp.findNextProtein(self.folderPath)
                 print('returning the next protein ', nextProtein)
                 response.write(nextProtein)
 
@@ -79,8 +80,8 @@ class RelaxedRequestHandler(SimpleHTTPRequestHandler):
         proteinName = self.path[self.path.find('=')+1:]
         print('saving protein ', proteinName)
         #save protein to file
-        pp = ProteinPicker()
-        pp.savePNG(proteinName, self.folderPath, body)
+        
+        self.pp.savePNG(proteinName, self.folderPath, body)
 
         #construct a response
         self.send_response(200)
