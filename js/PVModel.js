@@ -242,19 +242,21 @@ class Model {
                 noColourCount++;
             }
         }
-        console.log('=================');
-        console.log('blue# '+blueCount+' red# '+ redCount+' green# ' 
-                    + greenCount + ' no# '+ noColourCount);
+        //****commented out console.log to improve memory on browser
+        //console.log('=================');
+        //console.log('blue# '+blueCount+' red# '+ redCount+' green# ' 
+        //           + greenCount + ' no# '+ noColourCount);
         var total = blueCount + redCount + greenCount;
-        console.log('the total is ' +total);
+        
+        //console.log('the total is ' +total);
 
         //console.log('the total average colour count is '+totalAvgColour);
         if (blueCount === 0) blueCount = 1;
         if (redCount === 0) redCount = 1;
         if (greenCount === 0) greenCount = 1;
         var tCount = blueCount * greenCount * redCount;
-        console.log('total count is '+tCount);
-        console.log('=================');
+        //console.log('total count is '+tCount);
+        //console.log('=================');
         //return totalAvgColour;
 
 

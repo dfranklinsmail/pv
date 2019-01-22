@@ -39,16 +39,18 @@ class HillClimb {
                 //add the move to history
                 this.moves.newMaxMove(this.maxNeighbourMove);
                 //move to local max
-                console.log(">>>> new local max move " + this.maxNeighbourMove + ' with value' + this.maxNeighbourValue);
+
+                //****commented out console.log to improve memory on browser
+                //console.log(">>>> new local max move " + this.maxNeighbourMove + ' with value' + this.maxNeighbourValue);
                 this.model.rotate(this.maxNeighbourMove[0], this.maxNeighbourMove[1], this.maxNeighbourMove[2]);
                 this.localMaxOrientation = this.model.currentRotation;
             } else {
                 //display accumulated moves
-                console.log('accumulated moves');
-                console.log(this.accumulatedMoves);
-                console.log('orientation of best orientation');
-                console.log(this.localMaxOrientation)
-                console.log('the local max value '+this.localMaxValue);
+                //console.log('accumulated moves');
+                //console.log(this.accumulatedMoves);
+                //console.log('orientation of best orientation');
+                //console.log(this.localMaxOrientation)
+                //console.log('the local max value '+this.localMaxValue);
 
                 //end loop
                 clearInterval(this.loopId);
@@ -57,16 +59,16 @@ class HillClimb {
             //TODO: need to split this up into two!!!!
             if (this.currentMove === null) {
                 this.currentMove = this.moves.peak();
-                console.log('moving to new neighbour');
-                console.log(this.currentMove);
+                //console.log('moving to new neighbour');
+                //console.log(this.currentMove);
                 this.model.rotate(this.currentMove[0], this.currentMove[1], this.currentMove[2]);
             } else {
                 //remove a move
                 var cMove = this.moves.pop();
                 //
-                console.log('calculate and move back');
+                //console.log('calculate and move back');
                 var cValue = this.model.calculateValue();
-                console.log('cValue ' + cValue);
+                //console.log('cValue ' + cValue);
                 if (cValue > this.maxNeighbourValue) {
                     this.maxNeighbourValue = cValue;
                     this.maxNeighbourMove = cMove;
@@ -76,7 +78,7 @@ class HillClimb {
                 this.model.rotate(negativeMove[0], negativeMove[1], negativeMove[2]);
                 //reset
                 this.currentMove = null;
-                console.log('moved back');
+                //console.log('moved back');
             }
             //a nearest neighbour exists
             //move to it, 
