@@ -212,7 +212,7 @@ class Model {
         var height = canvas.height;
         var webGLContext = canvas.getContext('webgl');
         var pixels = new Uint8Array(width * height * 4);
-        console.log('reading pixels');
+        //console.log('reading pixels');
         webGLContext.readPixels(0, 0, width, height, webGLContext.RGBA, webGLContext.UNSIGNED_BYTE, pixels);
         return pixels;
     }

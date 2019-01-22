@@ -48,7 +48,7 @@ class IterateSearch {
     } 
 
     loop() {
-        console.log("contZ="+this.countZ+", countY="+this.countY+", countX="+this.countX);
+        //console.log("contZ="+this.countZ+", countY="+this.countY+", countX="+this.countX);
         if (this.countZ >= 360) {
             //finished move to best and finish
             this.model.move(this.bestOrientation);
