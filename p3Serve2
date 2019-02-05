@@ -50,7 +50,7 @@ class RelaxedRequestHandler(SimpleHTTPRequestHandler):
                 
                 nextProtein = self.pp.findNextProtein(self.folderPath)
                 print('returning the next protein ', nextProtein)
-                response.write(nextProtein)
+                response.write(nextProtein.encode('utf-8'))
 
                 self.wfile.write(response.getvalue())
                 return response

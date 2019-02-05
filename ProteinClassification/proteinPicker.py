@@ -9,6 +9,12 @@ import csv
 class ProteinPicker():
     def __init__(self):
         self.knownProteins = {}
+        self.folderProteins = []
+        self.classificationToFolderName = {}
+        self.classificationToFolderName['a'] = 'allalpha'
+        self.classificationToFolderName['b'] = 'allbeta'
+        self.classificationToFolderName['c'] = 'mixedalphabeta'
+        self.classificationToFolderName['d'] = 'segregatedalphabeta'
     """
         Most proteins have a corrisponding fasta file url on the 
         site https://www.rcsb.org/ protein data bank.
@@ -18,79 +24,73 @@ class ProteinPicker():
 
     def findNextProtein(self, dirname) :
         print('in find next protein')
-        self.getKnownProteins()
+        knownProteins = self.getKnownProteins()
+        print('known proteins count {}'.format(len(knownProteins)))
         #print 'length ', len(self.knownProteins)
-        files = os.listdir(dirname)
-    
-        folderProteins = []
-        for file in files:
-            if file.endswith('.png') :
-                print(file[:len(file)-4])
-                folderProteins.append(file[:len(file)-4])
-
-        for kp in self.knownProteins :
-            proteinName = kp.__str__()
-            if proteinName not in folderProteins :
+        foundProteins = self.getFolderProteins(dirname)
+        print('found proteins count {}'.format(len(foundProteins)))
+        
+        # find the first protein from the known 25pdb file
+        # that is not in the already imaged folder proteins
+        for proteinName in knownProteins.keys() :
+            # proteinName = kp.__str__()
+            if proteinName not in foundProteins :
                 print(proteinName)
-                return kp.name()
+                #return kp.name()
+                return proteinName
 
         return ''
 
+    def getFolderProteins(self, dirname) :
+        if len(self.folderProteins) == 0 :
+            for folder in self.classificationToFolderName.values() :
+                files = os.listdir(dirname+folder)
+                for file in files:
+                    if file.endswith('.png') :
+                        name = file[:-4]
+                        name = name.replace(':', '-')
+                        name = name.replace('_', '')
+                        self.folderProteins.append(name)
+
+        return self.folderProteins
 
 
     def savePNG(self, proteinName, path, data) :
         #save the data to a file
-        print('Saving {}, protein to folder: {}'.format(proteinName, path))
         
+        folderName = self.getClassFolderName(proteinName)
         dataFile = proteinName+'.png'
         data = data[len('data:image/png;base64,'):]
 
-        with open(path+dataFile, 'wb') as f:
+        print('Saving {}, protein to folder: {}'.format(proteinName, path+folderName))
+        with open(path+folderName+'/'+dataFile, 'wb') as f:
             f.write(base64.decodestring(data))
-            #f.write(data.decode('base64'))
+        self.folderProteins.append(proteinName)
+
+    def getClassFolderName(self, proteinName) :  
+        if len(self.knownProteins) == 0 :
+            self.getKnownProteins()
+        
+        folderName = ''
+        if proteinName in self.knownProteins :
+            folderName = self.classificationToFolderName[self.knownProteins[proteinName]]
+        
+        return folderName
 
     def getKnownProteins(self) :
 
-        if len(self.knownProteins) == 0:
+        if len(self.knownProteins) == 0 :
             with open(os.path.join(os.path.dirname(__file__), '25PDB.csv')) as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
                 line_count = 0
-                for row in csv_reader:
+                for row in csv_reader :
                     if line_count == 0:
                         line_count = 1
-                    else:
-                        protein = Protein(row[0])
-                        print('the protein is ')
-                        print(protein)
-                        
+                    else :
                         #set the classification for this protein
-                        self.knownProteins[protein] = row[3] 
+                        proteinName = row[0]
+                        proteinName = proteinName.replace(':', '-')
+                        proteinName = proteinName.replace('_', '')
+                        self.knownProteins[proteinName] = row[3] 
         
-        print('returning known proteins')
         return self.knownProteins
-
-
-
-class Protein():
-    def __init__(self, encodedProtein):
-        #extract the protein's name
-        self.protein = encodedProtein[0:4]
-        self.chain = encodedProtein[4:5]
-        if len(encodedProtein) > 5:
-            chainSegment = encodedProtein[6:].replace('-', ' ').split(' ')
-            self.chainSegmentStart = chainSegment[0]
-            self.chainSegmentEnd = chainSegment[1]
-        
-    def __str__(self):
-        toString = self.protein
-        if self.chain != "_":
-            toString += self.chain
-        if hasattr(self, 'chainSegmentEnd'):
-            toString += "-"+self.chainSegmentStart + "-" + self.chainSegmentEnd 
-        return toString
-
-    def __repr__(self):
-        return "Protein"
-
-    def name(self):
-        return self.__str__().encode()
