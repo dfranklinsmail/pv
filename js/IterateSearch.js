@@ -15,7 +15,7 @@ class IterateSearch {
 
     constructor(Model) { //constructor could take a model object?
         //helpers variables
-        this.currentOrientation = null
+        this.currentOrientation = null;
         this.currentMove = [0, 0, 0];
         this.model = Model;
 

@@ -144,7 +144,7 @@ class Model {
         var dataURL = canvas.toDataURL();
         //console.log(dataURL);
         //saveAs(dataURL, )
-        var filename = "/Users/sircrashalot/Documents/school/thesis/proteins"+protein+".png";
+        var filename = "/Users/sircrashalot/Documents/school/thesis/proteins6/"+protein+".png";
         var proteinFile = new File(filename);
         new File()
         proteinFile.open("w");
@@ -169,7 +169,7 @@ class Model {
     }
 
     getNextProtein( successFunction ){
-        $.get("http://localhost:8000/nextProtein", function(data, status){
+        $.get("http://localhost:8000/nextProtein", function(data){
             successFunction(data);
             //alert("Data: " + data + "\nStatus: " + status);
         });
@@ -197,10 +197,8 @@ class Model {
     extractCanvas() {
         var canvas = document.getElementsByTagName("canvas");
 
-        var arrayLength = canvas.arraylength;
         for (var c of canvas) {
             var webglContext = c.getContext('webgl');
-            var twoDContext = c.getContext('2d');
             if (webglContext !== null) {
                 return c;
             }
