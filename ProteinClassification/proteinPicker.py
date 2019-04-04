@@ -26,9 +26,9 @@ class ProteinPicker():
         print('in find next protein')
         
         #for the 25pdb file
-        knownProteins = self.getKnownProteins()
+        #knownProteins = self.getKnownProteins()
         #for an D1185 or D8244 file
-        #knownProteins = self.getKnownProteinsXLS()
+        knownProteins = self.getKnownProteinsXLS()
         print('known proteins count {}'.format(len(knownProteins)))
         #print 'length ', len(self.knownProteins)
         folderProteins = self.getFolderProteins(dirname)

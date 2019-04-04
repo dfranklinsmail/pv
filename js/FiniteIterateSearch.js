@@ -51,15 +51,14 @@ class FiniteIterateSearch {
             //record the image
             this.model.sendToServer(this.protein);
         } else if (this.index < this.moves.length) {
-            //calculate next move
-            var currentMove = this.moves[this.index];
-            this.index = this.nextIndex
-            if (currentMove == this.moves.length) {
-                this.nextIndex = -1;
-            }
             //move the model to the next orientation
+            var currentMove = this.moves[this.index];
             this.model.rotate(currentMove[0], currentMove[1], currentMove[2]);
+            
+            //get next move
+            this.index = this.nextIndex
         } else {
+            //No more moves get the next protein with the call back function
             clearInterval(this.loopId);
             if (this.callBackFunction) {
                 this.callBackFunction();
