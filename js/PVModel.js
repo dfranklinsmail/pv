@@ -3,15 +3,8 @@
 class Model {
     constructor(){
         this.currentRotation = new Float32Array(9);
-        this. currentRotation[0] = 1;
-        this.currentRotation[1] = 0;
-        this.currentRotation[2] = 0;
-        this.currentRotation[3] = 0;
-        this.currentRotation[4] = 1;
-        this.currentRotation[5] = 0;
-        this.currentRotation[6] = 0;
-        this. currentRotation[7] = 0;
-        this. currentRotation[8] = 1;
+        this.resetRotation();
+        
 
         this.maxBlue = 400000;
         this.maxRed = 400000;
@@ -24,16 +17,20 @@ class Model {
         });
     }
 
- 
+    resetRotation() {
+        this. currentRotation[0] = 1;
+        this.currentRotation[1] = 0;
+        this.currentRotation[2] = 0;
+        this.currentRotation[3] = 0;
+        this.currentRotation[4] = 1;
+        this.currentRotation[5] = 0;
+        this.currentRotation[6] = 0;
+        this. currentRotation[7] = 0;
+        this. currentRotation[8] = 1;
+    }
     rotate(xDegree, yDegree, zDegree) {
-        //var myPV = require(['pv']);
-        // var pvNew = window.pv;
-        // var v = myPV.viewer;
-        // this.currentRotation = rotateZ(rotateY(rotateX(this.currentRotation, xDegree), yDegree), zDegree);
-        // console.log('current rotation');
-        // console.log(this.currentRotation);
-        // v.setRotation(this.currentRotation, 0);
 
+        this.resetRotation();
         this.currentRotation = rotateZ(rotateY(rotateX(this.currentRotation, xDegree), yDegree), zDegree);
         this.move(this.currentRotation);
         
@@ -142,8 +139,7 @@ class Model {
         console.log('saveing '+protein);
         var canvas = this.extractCanvas();
         var dataURL = canvas.toDataURL();
-        //console.log(dataURL);
-        //saveAs(dataURL, )
+       
         var filename = "/Users/sircrashalot/Documents/school/thesis/proteins6/"+protein+".png";
         var proteinFile = new File(filename);
         new File()

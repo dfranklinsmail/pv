@@ -16,7 +16,8 @@ from ProteinClassification.proteinPicker import ProteinPicker
 # essentially like SimpleHTTPRequestHandler, but sets the allow origin
 # header.
 class RelaxedRequestHandler(SimpleHTTPRequestHandler):
-    folderPath = '/Users/sircrashalot/Documents/school/thesis/proteinsD8244/'
+    #folderPath = '/Users/sircrashalot/Documents/school/thesis/proteinsD8244/'
+    folderPath = '/Users/sircrashalot/Documents/school/thesis/proteinsNew25PDB/'
     pp = ProteinPicker()
 
     def send_head(self):

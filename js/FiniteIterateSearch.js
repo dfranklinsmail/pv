@@ -21,6 +21,7 @@ class FiniteIterateSearch {
         this.index = 0;
         this.nextIndex = 1;
         this.loopId = null;
+        this.currentMove;
 
         this.moves = [ //6 moves to capture all 90 degree rotations of the protein
             [0,0,0],
@@ -42,18 +43,22 @@ class FiniteIterateSearch {
         var t = this;  
         this.loopId = setInterval(function() {t.loop();}, 500);
     } 
-
+   
     loop() {
         //console.log("contZ="+this.countZ+", countY="+this.countY+", countX="+this.countX);
+        
         if (this.index == this.nextIndex) {
             ++this.nextIndex; //increment the next index
             
             //record the image
             this.model.sendToServer(this.protein);
+            //this.model.sendToServer(this.protein+'['+this.currentMove[0]+','+this.currentMove[1]+','+this.currentMove[2]+']');
         } else if (this.index < this.moves.length) {
             //move the model to the next orientation
-            var currentMove = this.moves[this.index];
-            this.model.rotate(currentMove[0], currentMove[1], currentMove[2]);
+            console.log(this.index);
+            this.currentMove = this.moves[this.index];
+            console.log(this.currentMove);
+            this.model.rotate(this.currentMove[0], this.currentMove[1], this.currentMove[2]);
             
             //get next move
             this.index = this.nextIndex
